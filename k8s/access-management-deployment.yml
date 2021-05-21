@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: access-management-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: access-management
+  template:
+    metadata:
+      labels:
+        app: access-management
+    spec:
+      containers:
+        - name: access-management
+          image: kalanju/access-management
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4000
+          env:
+            - name: MYSQL_HOST
+              value: mysql-cluster-ip-service
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: password
+            - name: MYSQL_DB
+              value: mysql
+            - name: MYSQL_PORT
+              value: '3306'
+          resources:
+            limits:
+              memory: "250Mi"
+              cpu: "200m"
